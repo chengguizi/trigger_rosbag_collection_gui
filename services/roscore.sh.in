@@ -1,0 +1,7 @@
+#!/bin/bash
+
+sleep 10
+echo "Source @CATKIN_DEVEL_PREFIX@/../../setup.bash"
+source @CATKIN_DEVEL_PREFIX@/../../setup.bash
+echo "Starting roscore"
+roscore

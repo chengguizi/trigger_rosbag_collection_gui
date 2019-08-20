@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Source @CATKIN_DEVEL_PREFIX@/../../setup.bash"
+source @CATKIN_DEVEL_PREFIX@/../../setup.bash
+
+sleep 5
+echo "Launch rosmon for web-server"
+mon launch --disable-ui --name=web_server @CMAKE_PROJECT_NAME@ websocket.launch

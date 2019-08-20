@@ -1,0 +1,18 @@
+#!/bin/bash
+
+src="@CMAKE_BINARY_DIR@/services"
+link="/etc/systemd/system"
+files="@files_for_configure@"
+
+# convert delimiter ; to space
+IFS=';'
+read -a files_array <<< "${files}"
+
+# set -x
+
+for file in ${files_array};
+do
+    echo "Enabling ${file}.service"
+    # sudo ln -s -f ${src}/${file} ${link}/${file} && echo "Created symlink to " ${src}/${file}
+    sudo systemctl enable ${src}/${file}.service
+done

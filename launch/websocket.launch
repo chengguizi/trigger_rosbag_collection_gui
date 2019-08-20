@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="web_video_server" type="web_video_server" name="web_video_server" clear_params="true" output="screen"/>
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+</launch>

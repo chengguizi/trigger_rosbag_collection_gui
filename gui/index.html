@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+    <head>
+    <title>Stereo Pose Collect</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="./bootstrap/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+    </head>
+
+    <script src="./roslibjs/roslib.min.js"></script>
+    <script src="subscribers.js"></script>
+    <script src="webui.js"></script>
+
+
+    <body class="bg-light">
+        <div class="container-fluid">
+    
+            <div class="row p-1 bg-dark text-light">
+                <div class="col-sm" >
+                    <strong>Image Pose Collection</strong> [for Image Enhancement]
+                    
+                </div>
+                <div class="col-sm"  >
+                    <span id="server-ip"></span> (<span id="roslibjs-status"> Waiting to Connect... </span>)
+                </div>
+                <div class="col-sm">
+                    
+                </div>
+                <div class="col-sm">
+                    <span class="float-right">Cheng Huimin - 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row my-1">
+            <div class="col-md-2">
+                Exposure=  <span id="text-exposure"> </span>,  Gain=<span id="text-gain">  </span> ,  Seq=<span id="text-seq">  </span> , 	<br>  Mean Lux=<span id="text-lux">  </span> , Var=<span id="text-var"></span>
+                <img src="" class="my-1 img-fluid" alt="" id="video-left" />
+                <img src="" class="img-fluid" alt="" id="video-right" />
+            </div>
+            <div class="col-md ">
+                    x= <span id="text-x"> </span>, y= <span id="text-y"> </span>, z= <span id="text-z"> </span>, yaw= <span id="text-yaw"></span>
+                    
+                    <div class="row">
+                            <div class="col">
+                                Dark Left
+                                <img src="" class="my-1 img-fluid" alt="" id="snapshot-dark-left" />
+                            </div>
+                            <div class="col">
+                                Dark Right
+                                <img src="" class="my-1 img-fluid" alt="" id="snapshot-dark-right" />
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col">
+                                Bright Left
+                                <img src="" class="my-1 img-fluid" alt="" id="snapshot-bright-left" />
+                            </div>
+                            <div class="col">
+                                Bright Right
+                                <img src="" class="my-1 img-fluid" alt="" id="snapshot-bright-right" />
+                            </div>
+                    </div>
+                    
+            </div>
+            <div class="col-md-3">
+                <div class="row my-1 card">
+                    <div class="col-sm card-body bg-light">
+                        <h5 class="card-title">Streams</h5>
+                        <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="cb-left-stereo" onclick="cb_process()" value="option1" checked="checked">
+                        <label class="form-check-label" for="cb-left-stereo">Left Stereo</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="cb-right-stereo" onclick="cb_process()" value="option2" checked="checked">
+                        <label class="form-check-label" for="cb-right-stereo">Right Stereo</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-1 card">
+                    <div class="col-sm card-body bg-light">
+                        <h5 class="card-title">Record</h5>
+
+                        <button type="button" class="btn btn-primary" id="btn-record-frame">Record Frame</button>  <span id="record-frame-status">(Status)</span>
+                    </div>
+
+                </div>
+
+                <div class="row my-1 card">
+                    <div class="col-sm card-body bg-light">
+                        <h5 class="card-title">Camera Settings</h5>
+                        Dark
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text">Exposure & Gain</span>
+                            </div>
+                            <input type="text" class="form-control" id="text-dark-exposure" placeholder="in usec" value="200">
+                            <input type="text" class="form-control" id="text-dark-gain" placeholder="16~248" value="120">
+                            <div class="input-group-append">
+                            <!-- <span class="input-group-text">us</span> -->
+                            <button class="btn btn-outline-secondary" type="button" id="btn-dark-exposure-preview">Preview</button>
+                            <!-- <button class="btn btn-outline-secondary" type="button" id="btn-dark-exposure-set">Set</button> -->
+                            </div>
+                        </div>
+                        
+                        Bright
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text">Exposure & Gain</span>
+                            </div>
+                            <input type="text" class="form-control" id="text-bright-exposure"  placeholder="in usec" value="10000">
+                            <input type="text" class="form-control" id="text-bright-gain" placeholder="16~248" value="16">
+                            <div class="input-group-append">
+                            <!-- <span class="input-group-text">us</span> -->
+                            <button class="btn btn-outline-secondary" type="button" id="btn-bright-exposure-preview">Preview</button>
+                            <!-- <button class="btn btn-outline-secondary" type="button" id="btn-bright-exposure-set">Set</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROSmon related -->
+
+                <div class="row my-1 card">
+                    <div class="col-md card-body bg-light">
+                        <strong>System Health: </strong> <span id="state-msg-seq"> </span> <br>
+                        - <strong>rs2_ros: </strong> <span id="state-msg-rs2"> </span> <br>
+                        - <strong>trigger_rosbag: </strong> <span id="state-msg-trigger"> </span> <br>
+             
+                        <div class="row m-1">
+                            <button type="button" class="btn btn-danger btn-sm m-1" id="btn-stop-rs2">Stop RS2</button>
+                            <button type="button" class="btn btn-warning btn-sm m-1" id="btn-reset-rs2">Reset RS2</button>
+                        </div>
+
+                        <div class="row m-1">
+                            <button type="button" class="btn btn-danger btn-sm m-1" id="btn-stop-trigger">Stop Trigger</button>
+                            <button type="button" class="btn btn-warning btn-sm m-1" id="btn-reset-trigger">Reset Trigger</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div> 
+            
+            
+
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row my-1">
+            <div class="col-md-3">
+                
+
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Concole -->
+
+    <div class="container-fluid my-4">
+        <div class="alert alert-primary">
+            <div class="row"> 
+                <div class="col">
+                    <h4 class="alert-heading">Console Output  </h4>
+                </div>  
+                <div class="col">
+                    <button type="button" class="btn btn-success btn-sm float-right" id="btn-clear">Clear Console</button>        
+                </div>
+            </div>
+            
+                
+            
+            <div class="row m-4" style="height:250px; overflow-y: scroll;" >
+                    <div class="col-md" id="console-display">
+                    </div>
+            </div>    
+        </div>
+    
+    </div>
+
+    </body>
+</html>
