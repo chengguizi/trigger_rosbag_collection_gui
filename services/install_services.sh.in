@@ -10,7 +10,7 @@ read -a files_array <<< "${files}"
 
 # set -x
 
-for file in ${files_array};
+for file in ${files_array[@]};
 do
     echo "Enabling ${file}.service"
     # sudo ln -s -f ${src}/${file} ${link}/${file} && echo "Created symlink to " ${src}/${file}
