@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "Source @CATKIN_DEVEL_PREFIX@/../../setup.bash"
+source @CATKIN_DEVEL_PREFIX@/../../setup.bash
+
+sleep 5
+echo "Launch rosmon for trigger rosbag collection"
+mon launch --disable-ui --name=trigger_rosbag_collection @CMAKE_PROJECT_NAME@ routine.launch

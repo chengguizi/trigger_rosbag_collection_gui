@@ -160,7 +160,10 @@ include_directories(
 set (files_for_configure 
   roscore
   web-server
+  trigger-rosbag-collection
 )
+
+set (CURRENT_USER $ENV{USER})
 
 foreach(file ${files_for_configure})
   configure_file(services/${file}.sh.in services/${file}.sh @ONLY) # by default, it is in ${CMAKE_BINARY_DIR}

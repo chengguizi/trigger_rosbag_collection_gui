@@ -1,21 +1,27 @@
-function subscribeDriverUpdates(){
+function subscribeMonUpdates(){
     var listener = new ROSLIB.Topic({
         ros : ros,
-        name : '/mon_drivers/state',
-        messageType : 'rosmon/State'
+        name : '/trigger_rosbag_collection/state',
+        messageType : 'rosmon_msgs/State'
     })
 
     listener.subscribe(function(message){
-        document.getElementById("state-msg-seq-driver").innerHTML = message.header.seq;
+        document.getElementById("state-msg-seq").innerHTML = message.header.seq;
 
         for (i=0; i<message.nodes.length; i++){
             switch(message.nodes[i].name){
-                case "imu":
-                    ID = "state-msg-imu";
+                case "snapshot.py":
+                    ID = "state-msg-trigger";
                     break;
-                case "stereo":
+                case "rs2_ros":
                     ID = "state-msg-rs2";
-                    break
+                    break;
+                case "velodyne_nodelet_manager":
+                    ID = "state-msg-velodyne";
+                    break;
+                case "alaserOdometry":
+                    ID = "state-msg-aloam";
+                    break;
                 default:
                     console.log("unknown node" + message.nodes[i].name);
                     continue;
@@ -68,15 +74,15 @@ function subscribePoseInfo(){
     var listener = new ROSLIB.Topic({
         ros : ros,
         name : '/snapshot_pose',
-        messageType : 'geometry_msgs/PoseStamped'
+        messageType : 'geometry_msgs/PoseWithCovarianceStamped'
     });
 
     listener.subscribe(function(msg){
-        document.getElementById("text-x").innerHTML = msg.pose.position.x.toFixed(1);
-        document.getElementById("text-y").innerHTML = msg.pose.position.y.toFixed(1);
-        document.getElementById("text-z").innerHTML = msg.pose.position.z.toFixed(1);
+        document.getElementById("text-x").innerHTML = msg.pose.pose.position.x.toFixed(1);
+        document.getElementById("text-y").innerHTML = msg.pose.pose.position.y.toFixed(1);
+        document.getElementById("text-z").innerHTML = msg.pose.pose.position.z.toFixed(1);
         
-        var q = msg.pose.orientation;
+        var q = msg.pose.pose.orientation;
         var yaw = - Math.atan2(2.0*(q.x*q.y + q.w*q.z), (q.w*q.w + q.x*q.x - q.y*q.y - q.z*q.z))/Math.PI*180;
         // var yaw = Math.asin(-2.0*(q.x*q.z - q.w*q.y))/Math.PI*180;
         // var yaw = Math.atan2(2.0*(q.y*q.z + q.w*q.x), q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z)/Math.PI*180;

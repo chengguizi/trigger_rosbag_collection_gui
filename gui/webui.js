@@ -26,7 +26,7 @@ window.onload = function () {
 
 
     ros = new ROSLIB.Ros({
-        url: "ws://" + robot_IP + ":9090"
+        url: "ws://" + robot_IP + ":9999"
     });
     
 
@@ -163,10 +163,10 @@ window.onload = function () {
                         frame_status.innerHTML = "Success!";
                     } 
                     else
-                        frame_status.innerHTML = "Error in bright image taking";
+                        frame_status.innerHTML = "Error in bright image taking:" + result.message;
                 });
             }else   
-                frame_status.innerHTML = "Error in dark image taking";
+                frame_status.innerHTML = "Error in dark image taking:" + result.message;
 
             
         });
@@ -177,9 +177,59 @@ window.onload = function () {
     video_left = document.getElementById('video-left');
     video_right = document.getElementById('video-right');
 
+
+    //// Routine for start / stop buttons for rosmon
+
+    var reset_system_service = new ROSLIB.Service({
+        ros : ros,
+        name : '/trigger_rosbag_collection/start_stop',
+        serviceType : 'rosmon/StartStop'
+    });
+
+    var request_restart_rs2 = new ROSLIB.ServiceRequest({
+        node : 'rs2_ros',
+        action : 3 // restart
+    });
+
+    var request_stop_rs2 = new ROSLIB.ServiceRequest({
+        node : 'rs2_ros',
+        action : 2 // stop
+    });
+
+    var request_restart_trigger = new ROSLIB.ServiceRequest({
+        node : 'snapshot.py',
+        action : 3 // restart
+    });
+
+    var request_stop_trigger = new ROSLIB.ServiceRequest({
+        node : 'snapshot.py',
+        action : 2 // stop
+    });
+
+    document.getElementById("btn-reset-rs2").onclick = function(){
+        reset_system_service.callService(request_restart_rs2,function(result){});
+    }
+
+    document.getElementById("btn-stop-rs2").onclick = function(){
+        reset_system_service.callService(request_stop_rs2,function(result){});
+    }
+
+    document.getElementById("btn-reset-trigger").onclick = function(){
+        reset_system_service.callService(request_restart_trigger,function(result){});
+    }
+
+    document.getElementById("btn-stop-trigger").onclick = function(){
+        reset_system_service.callService(request_stop_trigger,function(result){});
+    }
+
+    document.getElementById("btn-stop-record").onclick = function(){
+        reset_system_service.callService(request_restart_trigger,function(result){});
+    }
+
     subscribeRosout();
     subscribePoseInfo();
     subscribeCameraInfo();
+    subscribeMonUpdates();
 
     // subscribeSnapshot();
 

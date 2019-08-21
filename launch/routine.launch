@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find rs2_ros)/launch/rs2_ros.launch"/>
+    <node pkg="trigger_rosbag_collection_gui" name="snapshot.py" type="snapshot.py" output="screen" enable-coredumps="false"/>
+    <include file="$(find trigger_rosbag_collection_gui)/launch/velodyne-loam.launch"/>
+</launch>

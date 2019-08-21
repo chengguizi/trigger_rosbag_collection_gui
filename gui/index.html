@@ -38,11 +38,6 @@
 
     <div class="container-fluid">
         <div class="row my-1">
-            <div class="col-md-2">
-                Exposure=  <span id="text-exposure"> </span>,  Gain=<span id="text-gain">  </span> ,  Seq=<span id="text-seq">  </span> , 	<br>  Mean Lux=<span id="text-lux">  </span> , Var=<span id="text-var"></span>
-                <img src="" class="my-1 img-fluid" alt="" id="video-left" />
-                <img src="" class="img-fluid" alt="" id="video-right" />
-            </div>
             <div class="col-md ">
                     x= <span id="text-x"> </span>, y= <span id="text-y"> </span>, z= <span id="text-z"> </span>, yaw= <span id="text-yaw"></span>
                     
@@ -68,9 +63,15 @@
                     
             </div>
             <div class="col-md-3">
+                    
                 <div class="row my-1 card">
                     <div class="col-sm card-body bg-light">
                         <h5 class="card-title">Streams</h5>
+                        Exposure=  <span id="text-exposure"> </span>,  Gain=<span id="text-gain">  </span> ,  Seq=<span id="text-seq">  </span> , 	<br>  Mean Lux=<span id="text-lux">  </span> , Var=<span id="text-var"></span>
+                        <div class="row">
+                            <img src="" class="my-1 img-fluid" alt="" id="video-left" />
+                            <img src="" class="img-fluid" alt="" id="video-right" />
+                        </div>
                         <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="cb-left-stereo" onclick="cb_process()" value="option1" checked="checked">
                         <label class="form-check-label" for="cb-left-stereo">Left Stereo</label>
@@ -85,8 +86,13 @@
                 <div class="row my-1 card">
                     <div class="col-sm card-body bg-light">
                         <h5 class="card-title">Record</h5>
-
-                        <button type="button" class="btn btn-primary" id="btn-record-frame">Record Frame</button>  <span id="record-frame-status">(Status)</span>
+                        <div class="row my-1">
+                                <button type="button" class="btn btn-primary" id="btn-record-frame">Record Frame</button>  <span id="record-frame-status" class="mx-1">(Status)</span>
+                        </div>
+                        <div class="row my-1">
+                            <button type="button" class="btn btn-secondary" id="btn-stop-record">Stop & Save</button>
+                        </div>
+                        
                     </div>
 
                 </div>
@@ -131,6 +137,8 @@
                         <strong>System Health: </strong> <span id="state-msg-seq"> </span> <br>
                         - <strong>rs2_ros: </strong> <span id="state-msg-rs2"> </span> <br>
                         - <strong>trigger_rosbag: </strong> <span id="state-msg-trigger"> </span> <br>
+                        - <strong>velodyne: </strong> <span id="state-msg-velodyne"> </span> <br>
+                        - <strong>A-LOAM: </strong> <span id="state-msg-aloam"> </span> <br>
              
                         <div class="row m-1">
                             <button type="button" class="btn btn-danger btn-sm m-1" id="btn-stop-rs2">Stop RS2</button>
@@ -141,6 +149,16 @@
                             <button type="button" class="btn btn-danger btn-sm m-1" id="btn-stop-trigger">Stop Trigger</button>
                             <button type="button" class="btn btn-warning btn-sm m-1" id="btn-reset-trigger">Reset Trigger</button>
                         </div>
+
+                        <!-- <div class="row m-1">
+                            <button type="button" class="btn btn-danger btn-sm m-1" id="btn-stop-velodyne">Stop velodyne</button>
+                            <button type="button" class="btn btn-warning btn-sm m-1" id="btn-reset-velodyne">Reset velodyne</button>
+                        </div>
+
+                        <div class="row m-1">
+                            <button type="button" class="btn btn-danger btn-sm m-1" id="btn-stop-aloam">Stop A-LOAM</button>
+                            <button type="button" class="btn btn-warning btn-sm m-1" id="btn-reset-aloam">Reset A-LOAM</button>
+                        </div> -->
 
                     </div>
                 </div>

@@ -27,7 +27,7 @@ class Data2rosbag:
         self._pub_dark_right = rospy.Publisher('/snapshot_dark_right', sensor_msgs.msg.Image, queue_size=1)
         self._pub_bright_left = rospy.Publisher('/snapshot_bright_left', sensor_msgs.msg.Image, queue_size=1)
         self._pub_bright_right = rospy.Publisher('/snapshot_bright_right', sensor_msgs.msg.Image, queue_size=1)
-        self._pub_pose = rospy.Publisher('/snapshot_pose', geometry_msgs.msg.PoseStamped, queue_size=1)
+        self._pub_pose = rospy.Publisher('/snapshot_pose', geometry_msgs.msg.PoseWithCovarianceStamped, queue_size=1)
     
     def start(self):
         datetimestr = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
@@ -60,8 +60,9 @@ class Data2rosbag:
         self._pub_pose.publish(pose)
         self._pub_pose.publish(pose)
     def close(self):
-        self._bag.close()
-
+        if self._bag != "":
+            self._bag.close()
+        self._bag = ""
 
     def __del__(self):
         self.close()

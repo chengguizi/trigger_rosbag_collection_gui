@@ -1,0 +1,13 @@
+[Unit]
+Description=Launch file for Trigger rosbag Collection Nodes
+After=web-server.service
+Requires=web-server.service
+
+[Service]
+User=@CURRENT_USER@
+WorkingDirectory=/home/@CURRENT_USER@/.ros/
+ExecStart=/bin/bash @CMAKE_BINARY_DIR@/services/trigger-rosbag-collection.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
