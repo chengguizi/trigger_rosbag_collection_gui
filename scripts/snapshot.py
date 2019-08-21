@@ -19,7 +19,7 @@ import time
 
 mutex = Lock()
 msg_cache = [] # store the latest synchronised messages
-rosbag = data2rosbag.Data2rosbag(expanduser("~"))
+rosbag = data2rosbag.Data2rosbag(expanduser("~") + "/bags")
 
 def take_now_handler(req): # req constain is_dark information
     global msg_cache, mutex
