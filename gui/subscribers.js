@@ -78,15 +78,34 @@ function subscribePoseInfo(){
     });
 
     listener.subscribe(function(msg){
-        document.getElementById("text-x").innerHTML = msg.pose.pose.position.x.toFixed(1);
-        document.getElementById("text-y").innerHTML = msg.pose.pose.position.y.toFixed(1);
-        document.getElementById("text-z").innerHTML = msg.pose.pose.position.z.toFixed(1);
+        document.getElementById("text-x").innerHTML = msg.pose.pose.position.x.toFixed(2);
+        document.getElementById("text-y").innerHTML = msg.pose.pose.position.y.toFixed(2);
+        document.getElementById("text-z").innerHTML = msg.pose.pose.position.z.toFixed(2);
         
         var q = msg.pose.pose.orientation;
         var yaw = - Math.atan2(2.0*(q.x*q.y + q.w*q.z), (q.w*q.w + q.x*q.x - q.y*q.y - q.z*q.z))/Math.PI*180;
         // var yaw = Math.asin(-2.0*(q.x*q.z - q.w*q.y))/Math.PI*180;
         // var yaw = Math.atan2(2.0*(q.y*q.z + q.w*q.x), q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z)/Math.PI*180;
-        document.getElementById("text-yaw").innerHTML = yaw.toFixed(0);
+        document.getElementById("text-yaw").innerHTML = yaw.toFixed(1);
+        // atan2(2.0*(q.y*q.z + q.w*q.x), q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z);
+    });
+
+    var listener_delta = new ROSLIB.Topic({
+        ros : ros,
+        name : '/snapshot_pose_delta',
+        messageType : 'geometry_msgs/PoseWithCovarianceStamped'
+    });
+
+    listener_delta.subscribe(function(msg){
+        document.getElementById("text-dx").innerHTML = msg.pose.pose.position.x.toFixed(2);
+        document.getElementById("text-dy").innerHTML = msg.pose.pose.position.y.toFixed(2);
+        document.getElementById("text-dz").innerHTML = msg.pose.pose.position.z.toFixed(2);
+        
+        var q = msg.pose.pose.orientation;
+        var yaw = - Math.atan2(2.0*(q.x*q.y + q.w*q.z), (q.w*q.w + q.x*q.x - q.y*q.y - q.z*q.z))/Math.PI*180;
+        // var yaw = Math.asin(-2.0*(q.x*q.z - q.w*q.y))/Math.PI*180;
+        // var yaw = Math.atan2(2.0*(q.y*q.z + q.w*q.x), q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z)/Math.PI*180;
+        document.getElementById("text-dyaw").innerHTML = yaw.toFixed(0);
         // atan2(2.0*(q.y*q.z + q.w*q.x), q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z);
     });
 }
