@@ -66,12 +66,12 @@ window.onload = function () {
 
     var exposure_param = new ROSLIB.Param({
         ros : ros,
-        name : '/rs2_ros/" + camera_ns + "/exposure'
+        name : "/rs2_ros/" + camera_ns + "/exposure"
     });
 
     var gain_param = new ROSLIB.Param({
         ros : ros,
-        name : '/rs2_ros/" + camera_ns + "/gain'
+        name : "/rs2_ros/" + camera_ns + "/gain"
     });
 
     // for the dark preview button
