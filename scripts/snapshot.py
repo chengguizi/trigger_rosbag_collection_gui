@@ -62,6 +62,8 @@ def main():
     rospy.init_node('trigger_rosbag_collection')
     serv = rospy.Service('take_now',std_srvs.srv.SetBool(), take_now_handler)
 
+    camera_ns = "stereo"
+
     # message synchronisers
     sub_left = message_filters.Subscriber("/rs2_ros/" + camera_ns + "/left/image_rect_raw", sensor_msgs.msg.Image)
     sub_right = message_filters.Subscriber("/rs2_ros/" + camera_ns + "/right/image_rect_raw", sensor_msgs.msg.Image)

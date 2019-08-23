@@ -23,8 +23,8 @@ window.onload = function () {
     var myURL = window.location.href
     var url = new URL(myURL)
     camera_ns = url.searchParams.get("ns"); // namespace
-
-    if (camera_ns.length === 0){
+    // console.log(camera_ns);
+    if (camera_ns == null){
         camera_ns = "stereo";
     }
 
