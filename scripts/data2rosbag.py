@@ -70,6 +70,7 @@ class Data2rosbag:
                 rospy.loginfo(pose)
                 delta_pose = deltapose.delta_pose(self._last_pose, pose)
                 self._pub_pose_delta.publish(delta_pose)
+                self._bag.write("pose_delta", delta_pose)
 
             self._last_pose = pose
 

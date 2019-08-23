@@ -56,7 +56,7 @@ function subscribeCameraInfo(){
     //// Subscribe to /rosout
     var listener = new ROSLIB.Topic({
         ros : ros,
-        name : '/rs2_ros/stereo/camera_stats',
+        name : "/rs2_ros/" + camera_ns + "/camera_stats",
         messageType : 'rs2_ros/CameraStats'
     });
 

@@ -31,8 +31,8 @@ def take_now_handler(req): # req constain is_dark information
         rospy.loginfo("Taking Dark Image")
     else:
         rospy.loginfo("Taking Bright Image")
-    # stabilise frame for 0.5s second
-    time.sleep(0.5)
+    # stabilise frame for 1.5s second
+    time.sleep(1.5)
     mutex.acquire()
     
     # artificially synchronise all data's timestamp
@@ -63,11 +63,11 @@ def main():
     serv = rospy.Service('take_now',std_srvs.srv.SetBool(), take_now_handler)
 
     # message synchronisers
-    sub_left = message_filters.Subscriber("/rs2_ros/stereo/left/image_rect_raw", sensor_msgs.msg.Image)
-    sub_right = message_filters.Subscriber("/rs2_ros/stereo/right/image_rect_raw", sensor_msgs.msg.Image)
-    sub_left_info = message_filters.Subscriber("/rs2_ros/stereo/left/camera_info", sensor_msgs.msg.CameraInfo)
-    sub_right_info = message_filters.Subscriber("/rs2_ros/stereo/right/camera_info", sensor_msgs.msg.CameraInfo)
-    sub_camstats = message_filters.Subscriber("/rs2_ros/stereo/camera_stats", rs2_ros.msg.CameraStats)
+    sub_left = message_filters.Subscriber("/rs2_ros/" + camera_ns + "/left/image_rect_raw", sensor_msgs.msg.Image)
+    sub_right = message_filters.Subscriber("/rs2_ros/" + camera_ns + "/right/image_rect_raw", sensor_msgs.msg.Image)
+    sub_left_info = message_filters.Subscriber("/rs2_ros/" + camera_ns + "/left/camera_info", sensor_msgs.msg.CameraInfo)
+    sub_right_info = message_filters.Subscriber("/rs2_ros/" + camera_ns + "/right/camera_info", sensor_msgs.msg.CameraInfo)
+    sub_camstats = message_filters.Subscriber("/rs2_ros/" + camera_ns + "/camera_stats", rs2_ros.msg.CameraStats)
     sub_odom = message_filters.Subscriber("/aft_mapped_to_init", nav_msgs.msg.Odometry)
 
     msg_filter = message_filters.ApproximateTimeSynchronizer([sub_left, sub_right, sub_left_info, sub_right_info, sub_camstats, sub_odom],queue_size=2, slop=0.2)

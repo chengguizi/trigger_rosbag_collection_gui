@@ -4,7 +4,7 @@ function cb_process(){
 
     if (cb_stereo_left.checked == true){
         // Populate video source 
-        video_left.src = "http://" + robot_IP + ":8080/stream?topic=/rs2_ros/stereo/left/image_rect_raw&type=ros_compressed";
+        video_left.src = "http://" + robot_IP + ":8080/stream?topic=/rs2_ros/" + camera_ns + "/left/image_rect_raw&type=ros_compressed";
         // video_left.src = "http://" + robot_IP + ":8080/stream?topic=/left/debug_left&type=mjpeg&quality=20";
     }else{
         video_left.src ="";
@@ -12,13 +12,23 @@ function cb_process(){
 
     if (cb_stereo_right.checked == true){
         // Populate video source 
-        video_right.src = "http://" + robot_IP + ":8080/stream?topic=/rs2_ros/stereo/right/image_rect_raw&type=ros_compressed";
+        video_right.src = "http://" + robot_IP + ":8080/stream?topic=/rs2_ros/" + camera_ns + "/right/image_rect_raw&type=ros_compressed";
     }else{
         video_right.src ="";
     }
 }
 
 window.onload = function () {
+
+    var myURL = window.location.href
+    var url = new URL(myURL)
+    camera_ns = url.searchParams.get("ns"); // namespace
+
+    if (camera_ns.length === 0){
+        camera_ns = "stereo";
+    }
+
+    document.getElementById("text-camera-ns").innerHTML = camera_ns;
 
     snapshot_state = 0; // state 0 = waiting for dark images, state 1 = waiting for bright images
     robot_IP = location.hostname;
@@ -56,12 +66,12 @@ window.onload = function () {
 
     var exposure_param = new ROSLIB.Param({
         ros : ros,
-        name : '/rs2_ros/stereo/exposure'
+        name : '/rs2_ros/" + camera_ns + "/exposure'
     });
 
     var gain_param = new ROSLIB.Param({
         ros : ros,
-        name : '/rs2_ros/stereo/gain'
+        name : '/rs2_ros/" + camera_ns + "/gain'
     });
 
     // for the dark preview button
@@ -138,10 +148,20 @@ window.onload = function () {
 
 
     document.getElementById("btn-record-frame").onclick = function(){
-        image_dark_left.src = ""
-        image_dark_right.src = ""
-        image_bright_left.src = ""
-        image_bright_right.src = ""
+        image_dark_left.src = "";
+        image_dark_right.src = "";
+        image_bright_left.src = "";
+        image_bright_right.src = "";
+
+        document.getElementById("text-x").innerHTML="";
+        document.getElementById("text-y").innerHTML="";
+        document.getElementById("text-z").innerHTML="";
+        document.getElementById("text-yaw").innerHTML="";
+        document.getElementById("text-dx").innerHTML="";
+        document.getElementById("text-dy").innerHTML="";
+        document.getElementById("text-dz").innerHTML="";
+        document.getElementById("text-dyaw").innerHTML="";
+
         snapshot_state = 0;
         frame_status.innerHTML = "Taking Dark Image...";
         exposure_param.set(Number(dark_exposure.value));
