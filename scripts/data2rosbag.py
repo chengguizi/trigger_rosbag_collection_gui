@@ -75,7 +75,7 @@ class Data2rosbag:
             self._last_pose = pose
 
         self._pub_pose.publish(pose)
-        self._pub_pose.publish(pose)
+        # self._pub_pose.publish(pose)
     def close(self):
         if self._bag != "":
             self._bag.close()

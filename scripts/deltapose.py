@@ -5,6 +5,8 @@ import geometry_msgs.msg
 
 import tf
 
+import copy
+
 def pose2matrix(pose):
     trans_vec = [ pose.pose.pose.position.x,  pose.pose.pose.position.y,  pose.pose.pose.position.z]
     trans_matrix = tf.transformations.translation_matrix(trans_vec)
@@ -23,7 +25,7 @@ def delta_pose(pose_pre, pose_curr):
 
     tf_delta = tf.transformations.concatenate_matrices(tf_curr, tf_pre_inverse)
 
-    ret = pose_curr #geometry_msgs.msg.PoseWithCovarianceStamped()
+    ret = copy.deepcopy(pose_curr) #geometry_msgs.msg.PoseWithCovarianceStamped()
 
     (ret.pose.pose.orientation.x, ret.pose.pose.orientation.y , ret.pose.pose.orientation.z, ret.pose.pose.orientation.w ) = tf.transformations.quaternion_from_matrix(tf_delta)
     (ret.pose.pose.position.x, ret.pose.pose.position.y, ret.pose.pose.position.z) = tf.transformations.translation_from_matrix(tf_delta)
