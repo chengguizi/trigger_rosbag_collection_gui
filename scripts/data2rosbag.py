@@ -41,7 +41,7 @@ class Data2rosbag:
         rospy.loginfo("recording to " + self._filename)
         self._bag = rosbag.Bag(self._path + "/" + self._filename,'w')
 
-    def update(self, image_left, image_right, image_left_info, image_right_info, image_stats, pose, is_dark):
+    def update(self, image_left, image_right, image_left_info, image_right_info, image_stats, pose, lidar_points, is_dark):
         if self._bag == "":
             self.start()
         
@@ -52,6 +52,7 @@ class Data2rosbag:
         self._bag.write("image_stats",image_stats)
         self._bag.write("is_dark",is_dark)
         self._bag.write("pose",pose)
+        self._bag.write("lidar",lidar_points)
 
         if (is_dark.data == True):
             self._pub_dark_left.publish(image_left)
